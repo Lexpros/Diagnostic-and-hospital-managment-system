@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.HMSApp.Diagnostic.and.hospital.managment.system.entity.MedicalRecord;
 import com.HMSApp.Diagnostic.and.hospital.managment.system.entity.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import com.HMSApp.Diagnostic.and.hospital.managment.system.repository.PatientRepository;
 
 import javax.management.AttributeNotFoundException;
+
+import com.HMSApp.Diagnostic.and.hospital.managment.system.repository.MedicalRecordRepository;
 
 @RestController
 @CrossOrigin(allowedHeaders = "*",origins = "*")
@@ -22,10 +25,19 @@ public class PatientController {
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/patients")
 
-
     public List<Patient> getAllPatients(){
 
         return patientRepository.findAll();
+    }
+
+    @Autowired
+    private MedicalRecordRepository medicalRecordRepository;
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("/records")
+
+    public List<MedicalRecord> getMedicalRecords(){
+
+        return medicalRecordRepository.findAll();
     }
 
 //    public PatientController(PatientRepository patientRepository) {
@@ -73,5 +85,8 @@ public class PatientController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
+
+
+
     }
 }
