@@ -3,6 +3,7 @@ package com.HMSApp.Diagnostic.and.hospital.managment.system.entity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
@@ -10,30 +11,46 @@ import java.time.LocalDate;
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ColumnDefault("nextval('patients_patient_id_seq')")
-    @Column(name = "patient_id", nullable = false)
-    private Integer id;
+    private Long id;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "middle_name", nullable = false)
+    @Column(name = "middle_name")
     private String middleName;
 
-    @Column(name = "birth_date", nullable = false)
-    private LocalDate birthDate;
+    @Column(name = "birth_date")
+    private Date birthDate;
+
+    @Column(name = "sex")
+    private String sex;
 
     @Column(name = "contact_info", length = Integer.MAX_VALUE)
     private String contactInfo;
 
-    public Integer getId() {
+
+    public Patient() {
+
+    }
+
+    public Patient(Long id, String lastName, String firstName, String middleName, Date birthDate, String contactInfo) {
+        this.id = id;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.birthDate = birthDate;
+
+        this.contactInfo = contactInfo;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -61,12 +78,20 @@ public class Patient {
         this.middleName = middleName;
     }
 
-    public LocalDate getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     public String getContactInfo() {
@@ -77,10 +102,4 @@ public class Patient {
         this.contactInfo = contactInfo;
     }
 
-/*
- TODO [Reverse Engineering] create field to map the 'sex' column
- Available actions: Define target Java type | Uncomment as is | Remove column mapping
-    @Column(name = "sex", columnDefinition = "sex_enum not null")
-    private Object sex;
-*/
 }
