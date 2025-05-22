@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -38,7 +39,8 @@ const routes: Routes = [
   { path: 'updatemedicine/:id', component: UpdateMedicineComponent, canActivate: [AuthGaurdService] },
   { path: 'appointmentlist', component: AppointmentListComponent, canActivate: [AuthGaurdService] },
   { path: 'createappointment', component: CreateAppointmentComponent, canActivate: [AuthGaurdService] },
-  { path: 'viewpatient/:id', component: ViewPatientComponent }
+  { path: 'viewpatient/:id', component: ViewPatientComponent },
+  {path: 'create-medical-record', component: CreatMedicalRecordComponent, canActivate: [AuthGaurdService] }
 
 ]
 
@@ -62,6 +64,7 @@ const routes: Routes = [
   ],
   imports: [
     RouterModule.forRoot(routes),
+    NgbModule,
     FormsModule,
     BrowserModule,
     Ng2SearchPipeModule,

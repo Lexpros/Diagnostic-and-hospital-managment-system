@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { PatientService } from '../patient.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+
+import { MedicalRecord } from '../medical-record';
+import { MedicalRecordService } from '../medical-record.service';
 import { Patient } from '../patient';
+
 @Component({
   selector: 'app-creat-medical-record',
   templateUrl: './creat-medical-record.component.html',
@@ -9,17 +12,39 @@ import { Patient } from '../patient';
 })
 export class CreatMedicalRecordComponent implements OnInit {
 
-  id: number;
-  patient: Patient;
-  constructor(private route: ActivatedRoute, private patientService: PatientService) { }
+  @Input() patient: Patient; // Получаем пациента из родительского компонента (через модалку)
+
+  newRecord: MedicalRecord = new MedicalRecord();
+
+  constructor(
+    private medicalRecordService: MedicalRecordService,
+    public activeModal: NgbActiveModal
+  ) {}
 
   ngOnInit(): void {
-
-    this.id = this.route.snapshot.params['id'];
-    this.patient = new Patient();
-    this.patientService.getPatientById(this.id).subscribe(data => { 
-      this.patient = data;
-    } );
+    // patient передаётся через @Input() — дополнительных загрузок не требуется
   }
 
+  save(): void {
+    this.newRecord.patient = this.patient;
+
+    this.medicalRecordService.createMedicalRecord(this.newRecord).subscribe({
+      next: (response) => {
+        console.log('Медицинская карта сохранена:', response);
+        this.activeModal.close('saved');
+      },
+      error: (err) => {
+        console.error('Ошибка при сохранении:', err);
+      }
+    });
+  }
+
+  cancel(): void {
+    this.activeModal.dismiss('cancel');
+  }
+
+  onSubmit() {
+    console.log(this.patient);
+    this.save();
+  }
 }
