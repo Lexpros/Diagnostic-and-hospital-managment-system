@@ -13,7 +13,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(allowedHeaders = "*",origins = "*")
-@RequestMapping("/api/v4")
+@RequestMapping("/api/rec")
 public class MedicalRecordController {
     @Autowired
     private MedicalRecordRepository medicalRecordRepository;

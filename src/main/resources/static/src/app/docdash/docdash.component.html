@@ -1,0 +1,117 @@
+<nav style="margin:auto" class="navbar navbar-expand-lg bg-dark">
+
+  <a style="color: white;" class="navbar-brand" href="#">Lungity HOSPITALS</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+
+      <li class="nav-item">
+        <a style="color: white;" class="nav-link active" aria-current="page" href="javascript:void(0);"
+          routerLink="/createpatient">Add Patient</a>
+      </li>
+
+      <li class="nav-item">
+        <a style="color: white;" class="nav-link active" aria-current="page" href="javascript:void(0);"
+          routerLink="/medicinelist">View Medicines</a>
+      </li>
+
+
+
+
+
+    </ul>
+
+    <div class="mx-2">
+
+      <button style="margin: 5px;" class="btn btn-danger" data-toggle="modal" data-target="#loginModal"><a
+          style="color:white;" href="javascript:void(0);" routerLink="/home">Logout</a></button>
+
+    </div>
+
+  </div>
+
+</nav>
+<div class="grid">
+  <div class="container">
+    <hr>
+    <hr>
+    <hr>
+    <!-- <h2>Dashboard</h2>
+    <a style="color: rgb(86, 86, 86); font-size: x-large;">
+      <marquee behavior="scroll" direction="left">
+        Welcome to Dashboard. Please find the patient list available below!!. Click Add Patient to Add patients, Click
+        View Medicines to view and update Medicines</marquee>
+    </a>
+    <hr> -->
+    <hr>
+    <hr>
+    <hr><hr>
+    <hr>
+    <hr><hr>
+    <hr>
+    <hr>
+    
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <input type="text" class="form-control w-50" name="search" [(ngModel)]="searchText" placeholder="Поиск">
+
+      <button class="btn btn-outline-info btn-sm">
+        <i class="bi bi-person-fill-add" routerLink="/createpatient"></i>
+        Добавить пациента
+      </button>
+    </div>
+
+    <br>
+    <a style="color: rgb(86, 86, 86); font-size: xx-large;"></a>
+    <div class="tableFixHead">
+      <br>
+      <table class="table table-striped">
+        <thead class="table-header">
+          <tr>
+            <th>Id</th>
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Отчество</th>
+            <th>Дата рождения</th>
+            <th>Контакты</th>
+
+
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let patient of patients | filter:searchText">
+            <td>{{patient.id}}</td>
+            <td>{{patient.lastName}}</td>
+            <td>{{patient.firstName}}</td>
+            <td>{{patient.middleName}}</td>
+            <td>{{patient.birthDate}}</td>
+            <td>{{patient.contactInfo}}</td>
+
+
+            <td>
+              <button (click)="viewPatient(patient.id)" class="btn btn-outline-primary btn-sm" title="Запись на прием"
+                style="margin-left: 5px;">
+                <i class="bi bi-clipboard2-pulse-fill"></i>
+              </button>
+
+              <button (click)="viewPatient(patient.id)" class="btn btn-outline-success btn-sm"
+                title="Просмотр информации" style="margin-left: 5px;">
+                <i class="bi bi-eye-fill"></i>
+              </button>
+
+              <button (click)="updatePatient(patient.id)" class="btn btn-outline-info btn-sm"
+                title="Обновить данные пациента" style="margin-left: 5px;">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+              
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
