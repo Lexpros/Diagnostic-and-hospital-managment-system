@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { Patient } from '../patient';
 import { PatientService } from '../patient.service';
-
+import { CreatMedicalRecordComponent } from '../creat-medical-record/creat-medical-record.component';
 
 @Component({
   selector: 'app-admindash',
@@ -14,8 +16,11 @@ export class AdmindashComponent implements OnInit {
   searchText: string;
   patients: Patient[]; 
 
-  constructor(private patientService: PatientService,
-    private router: Router) { }
+  constructor(
+    private patientService: PatientService,
+    private router: Router,
+    private modalService: NgbModal
+  ) {}
 
   ngOnInit(): void {
 
@@ -46,8 +51,12 @@ export class AdmindashComponent implements OnInit {
     } ); 
   }
 
-  // creatMedicalRecord(id: number) {
-  //   this.
-  // }
+  openMedicalRecordModal(patient: Patient) {
+    const modalRef = this.modalService.open(CreatMedicalRecordComponent, {
+      size: 'lg',
+      backdrop: 'static'
+    });
+    modalRef.componentInstance.patient = patient;
+  }
 
 }

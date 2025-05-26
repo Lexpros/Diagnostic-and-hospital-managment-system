@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { Patient } from '../patient';
 import { PatientService } from '../patient.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreatMedicalRecordComponent } from '../creat-medical-record/creat-medical-record.component';
 
 @Component({
@@ -11,6 +12,7 @@ import { CreatMedicalRecordComponent } from '../creat-medical-record/creat-medic
   styleUrls: ['./docdash.component.css']
 })
 export class DocdashComponent implements OnInit {
+  
   searchText: string = '';
   patients: Patient[] = [];
 
