@@ -22,22 +22,47 @@ export class CreatMedicalRecordComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // patient передаётся через @Input() — дополнительных загрузок не требуется
-  }
+  this.medicalRecordService.getMedicalRecordsByPatientId(this.patient.id).subscribe({
+    next: (record) => {
+      if (record) {
+        this.newRecord = record; // Заполняем форму существующей записью
+        console.log('Медицинская карта найдена:', record);
+      }
+    },
+    error: (err) => {
+      console.warn('Медицинская карта не найдена, создаём новую');
+    }
+  });
+}
 
   save(): void {
-    this.newRecord.patient = this.patient;
+  this.newRecord.patient = this.patient;
 
-    this.medicalRecordService.createMedicalRecord(this.newRecord).subscribe({
+  if (this.newRecord.id) {
+    // Обновление существующей записи
+    this.medicalRecordService.updateMedicalRecord(this.newRecord.id, this.newRecord).subscribe({
       next: (response) => {
-        console.log('Медицинская карта сохранена:', response);
-        this.activeModal.close('saved');
+        console.log('Медицинская карта обновлена:', response);
+        this.activeModal.close('updated');
       },
       error: (err) => {
-        console.error('Ошибка при сохранении:', err);
+        console.error('Ошибка при обновлении:', err);
+      }
+    });
+  } else {
+    // Создание новой записи
+    this.medicalRecordService.createMedicalRecord(this.newRecord).subscribe({
+      next: (response) => {
+        console.log('Медицинская карта создана:', response);
+        this.activeModal.close('created');
+      },
+      error: (err) => {
+        console.error('Ошибка при создании:', err);
       }
     });
   }
+}
+
 
   cancel(): void {
     this.activeModal.dismiss('cancel');

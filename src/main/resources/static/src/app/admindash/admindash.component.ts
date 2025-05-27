@@ -45,11 +45,18 @@ export class AdmindashComponent implements OnInit {
   }
 
   deletePatient(id: number) {
-    this.patientService.deletePatient(id).subscribe(data => {
-      console.log(data);
-      this.getPatients();
-    } ); 
-  }
+  this.patientService.deletePatient(id).subscribe({
+    next: (data) => {
+      console.log('Удалено:', data);
+      this.getPatients(); // перезапрашивает список
+    },
+    error: (err) => {
+      console.error('Ошибка при удалении пациента:', err);
+      alert('Не удалось удалить пациента');
+    }
+  });
+}
+
 
   openMedicalRecordModal(patient: Patient) {
     const modalRef = this.modalService.open(CreatMedicalRecordComponent, {

@@ -38,6 +38,6 @@ export class UpdatePatientComponent implements OnInit {
   }
 
   goToPatientlist() {
-    this.router.navigate(['/docdash']);
+    this.router.navigate(['/admindash']);
   }
 }

@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {MedicalRecord} from './medical-record';
-
+import {Patient} from './patient';
 @Injectable({providedIn: 'root'})
 export class MedicalRecordService {
   private baseUrl = 'http://localhost:8080/api/rec/records';
@@ -17,11 +17,15 @@ export class MedicalRecordService {
     return this.httpClient.post<MedicalRecord>(`${this.baseUrl}`, record);
   }
 
-  getMedicalRecordById(id: number): Observable<MedicalRecord> {
-    return this.httpClient.get<MedicalRecord>(`${this.baseUrl}/${id}`);
-  }
+  // getMedicalRecordById(id: number): Observable<MedicalRecord> {
+  //   return this.httpClient.get<MedicalRecord>(`${this.baseUrl}/${id}`);
+  // }
 
   updateMedicalRecord(id: number, record: MedicalRecord): Observable<Object> {
     return this.httpClient.put(`${this.baseUrl}/${id}`, record);
+  }
+
+  getMedicalRecordsByPatientId(patientId: number): Observable<MedicalRecord> {
+    return this.httpClient.get<MedicalRecord>(`${this.baseUrl}/${patientId}`);
   }
 }

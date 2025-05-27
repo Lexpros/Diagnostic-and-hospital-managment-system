@@ -14,7 +14,7 @@ public class Examination {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnDefault("nextval('examinations_exam_id_seq')")
     @Column(name = "exam_id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -23,6 +23,16 @@ public class Examination {
 
     @Column(name = "exam_date", nullable = false)
     private LocalDate examDate;
+    @Column(name = "exam_type", columnDefinition = "exam_type_enum not null")
+    private String examType;
+
+    public String getExamType() {
+        return examType;
+    }
+
+    public void setExamType(String examType) {
+        this.examType = examType;
+    }
 
     @Column(name = "disease_stage", length = 100)
     private String diseaseStage;
@@ -36,11 +46,11 @@ public class Examination {
     @JoinColumn(name = "facility_id")
     private MedicalFacility facility;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -84,10 +94,5 @@ public class Examination {
         this.facility = facility;
     }
 
-/*
- TODO [Reverse Engineering] create field to map the 'exam_type' column
- Available actions: Define target Java type | Uncomment as is | Remove column mapping
-    @Column(name = "exam_type", columnDefinition = "exam_type_enum not null")
-    private Object examType;
-*/
+
 }

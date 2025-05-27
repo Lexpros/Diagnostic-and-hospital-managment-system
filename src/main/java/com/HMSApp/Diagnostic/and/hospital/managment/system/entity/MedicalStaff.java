@@ -12,7 +12,7 @@ public class MedicalStaff {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnDefault("nextval('medicalstaff_staff_id_seq')")
     @Column(name = "staff_id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
@@ -39,11 +39,11 @@ public class MedicalStaff {
     @JoinColumn(name = "facility_id")
     private MedicalFacility facility;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

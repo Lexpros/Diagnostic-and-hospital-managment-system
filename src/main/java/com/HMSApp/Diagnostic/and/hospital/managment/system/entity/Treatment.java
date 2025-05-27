@@ -14,7 +14,7 @@ public class Treatment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnDefault("nextval('treatments_treatment_id_seq')")
     @Column(name = "treatment_id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -36,11 +36,11 @@ public class Treatment {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

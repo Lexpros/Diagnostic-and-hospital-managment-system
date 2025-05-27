@@ -1,6 +1,7 @@
 package com.HMSApp.Diagnostic.and.hospital.managment.system.controllers;
 
 import com.HMSApp.Diagnostic.and.hospital.managment.system.entity.MedicalRecord;
+import com.HMSApp.Diagnostic.and.hospital.managment.system.entity.MedicalRecordDTO;
 import com.HMSApp.Diagnostic.and.hospital.managment.system.repository.MedicalRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,20 @@ public class MedicalRecordController {
     public MedicalRecord createMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
         return medicalRecordRepository.save(medicalRecord);
     }
+    @GetMapping(value = "/records/{patient_id}")
+    public ResponseEntity<MedicalRecordDTO> getMedicalRecordByPatientId(@PathVariable Long patient_id) throws AttributeNotFoundException {
+        MedicalRecord medicalRecord = medicalRecordRepository.findByPatientId(patient_id);
+        if (medicalRecord != null) {
+            medicalRecordRepository.delete(medicalRecord);
+        }
+
+        medicalRecord.getPatient().getId();
+
+        MedicalRecordDTO dto = new MedicalRecordDTO(medicalRecord);
+        return ResponseEntity.ok(dto);
+
+    }
+
 
     @PutMapping("/records/{id}")
     public ResponseEntity<MedicalRecord> updateMedicalRecord(@PathVariable Long id, @RequestBody MedicalRecord medicalRecordDetails) throws AttributeNotFoundException {

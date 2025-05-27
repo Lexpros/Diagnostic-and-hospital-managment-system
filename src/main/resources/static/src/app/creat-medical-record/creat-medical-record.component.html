@@ -7,14 +7,14 @@
 
   <div class="modal-body">
     <div *ngIf="patient">
-  <h5>Информация о пациенте</h5>
-  <p><strong>Фамилия:</strong> {{ patient.lastName }}</p>
-  <p><strong>Имя:</strong> {{ patient.firstName }}</p>
-  <p><strong>Отчество:</strong> {{ patient.middleName }}</p>
-  <p><strong>Дата рождения:</strong> {{ patient.birthDate | date: 'dd.MM.yyyy' }}</p>
-  <p><strong>Пол:</strong> {{ patient.sex }}</p>
-  <p><strong>Контактная информация:</strong> {{ patient.contactInfo }}</p>
-</div>
+      <h5>Информация о пациенте</h5>
+      <p><strong>Фамилия:</strong> {{ patient.lastName }}</p>
+      <p><strong>Имя:</strong> {{ patient.firstName }}</p>
+      <p><strong>Отчество:</strong> {{ patient.middleName }}</p>
+      <p><strong>Дата рождения:</strong> {{ patient.birthDate | date: 'dd.MM.yyyy' }}</p>
+      <p><strong>Пол:</strong> {{ patient.sex }}</p>
+      <p><strong>Контактная информация:</strong> {{ patient.contactInfo }}</p>
+    </div>
 
     <form #recordForm="ngForm">
       <div class="mb-3">

@@ -7,13 +7,18 @@ import java.util.Map;
 import com.HMSApp.Diagnostic.and.hospital.managment.system.entity.MedicalRecord;
 import com.HMSApp.Diagnostic.and.hospital.managment.system.entity.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.HMSApp.Diagnostic.and.hospital.managment.system.repository.PatientRepository;
 
-import javax.management.AttributeNotFoundException;
-
+import com.HMSApp.Diagnostic.and.hospital.managment.system.entity.MedicalRecord;
 import com.HMSApp.Diagnostic.and.hospital.managment.system.repository.MedicalRecordRepository;
+import com.HMSApp.Diagnostic.and.hospital.managment.system.controllers.MedicalRecordController;
+
+import javax.management.AttributeNotFoundException;
+import com.HMSApp.Diagnostic.and.hospital.managment.system.repository.MedicalRecordRepository;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @CrossOrigin(allowedHeaders = "*",origins = "*")
@@ -76,17 +81,25 @@ public class PatientController {
     }
 
     @DeleteMapping("/patients/{id}")
-    public ResponseEntity<Map<String,Boolean>> deletePatient(@PathVariable Long id) throws AttributeNotFoundException{
+    public ResponseEntity<Map<String, Boolean>> deletePatient(@PathVariable Long id) {
 
+        // Поиск пациента
         Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new AttributeNotFoundException("ABCD" + id));
-
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Пациент с id " + id + " не найден"));
         patientRepository.delete(patient);
+        // Поиск и удаление медкарты, если есть
+        MedicalRecord medicalRecord = medicalRecordRepository.findByPatientId(id);
+        if (medicalRecord != null) {
+            medicalRecordRepository.delete(medicalRecord);
+        }
+
+        // Удаление пациента
+
+        // Ответ клиенту
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
-
-
-
     }
+
 }
