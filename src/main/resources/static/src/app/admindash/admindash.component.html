@@ -34,14 +34,20 @@
   <hr>
   <hr>
   <hr>
-  <h2>Admin Dashboard</h2>
+  <h2>Панель администратора</h2>
   <a style="color: rgb(86, 86, 86); font-size: x-large;">
     <marquee behavior="scroll" direction="left">
       Welcome to Admin Dashboard. Please find the patient list below!!. Click Appointments to view and update
       Appointments, Click Add Appointment to add new Appointment</marquee>
   </a>
   <hr>
+  <div class="d-flex justify-content-between align-items-center w-100">
   <input type="text" name="search" [(ngModel)]="searchText" placeholder="Search">
+  <button class="btn btn-outline-info btn-sm">
+        <i class="bi bi-person-fill-add" routerLink="/createpatient"></i>
+        Добавить пациента
+      </button>
+  </div>
   <br>
   <a style="color: rgb(86, 86, 86); font-size: xx-large;">Current Patient List in the Queue</a>
   <div class="tableFixHead">
@@ -73,8 +79,13 @@
           <td>
             <button (click)="openMedicalRecordModal(patient)" class="btn btn-outline-primary btn-sm" title="Запись на прием"
                 style="margin-left: 5px;">
-                <i class="bi bi-clipboard2-pulse-fill"></i>
+                <i class="bi bi-calendar-plus"></i>
               </button>
+
+            <!-- <button (click)="openMedicalRecordModal(patient)" class="btn btn-outline-primary btn-sm" title="Запись на прием"
+                style="margin-left: 5px;">
+                <i class="bi bi-clipboard2-pulse-fill"></i>
+              </button> -->
 
             <button (click)="viewPatient(patient.id)" class="btn btn-outline-success btn-sm" title="Просмотр информации"
               style="margin-left: 5px;">

@@ -88,13 +88,6 @@ public class PatientController {
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Пациент с id " + id + " не найден"));
         patientRepository.delete(patient);
-        // Поиск и удаление медкарты, если есть
-        MedicalRecord medicalRecord = medicalRecordRepository.findByPatientId(id);
-        if (medicalRecord != null) {
-            medicalRecordRepository.delete(medicalRecord);
-        }
-
-        // Удаление пациента
 
         // Ответ клиенту
         Map<String, Boolean> response = new HashMap<>();

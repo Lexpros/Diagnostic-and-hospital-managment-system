@@ -5,47 +5,49 @@
     <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('')"></button>
   </div>
 
-  <div class="modal-body">
-    <div *ngIf="patient">
-      <h5>Информация о пациенте</h5>
-      <p><strong>Фамилия:</strong> {{ patient.lastName }}</p>
-      <p><strong>Имя:</strong> {{ patient.firstName }}</p>
-      <p><strong>Отчество:</strong> {{ patient.middleName }}</p>
-      <p><strong>Дата рождения:</strong> {{ patient.birthDate | date: 'dd.MM.yyyy' }}</p>
-      <p><strong>Пол:</strong> {{ patient.sex }}</p>
-      <p><strong>Контактная информация:</strong> {{ patient.contactInfo }}</p>
-    </div>
+  <form #recordForm="ngForm" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+      <div *ngIf="patient">
+        <h5>Информация о пациенте</h5>
+        <p><strong>Фамилия:</strong> {{ patient.lastName }}</p>
+        <p><strong>Имя:</strong> {{ patient.firstName }}</p>
+        <p><strong>Отчество:</strong> {{ patient.middleName }}</p>
+        <p><strong>Дата рождения:</strong> {{ patient.birthDate | date: 'dd.MM.yyyy' }}</p>
+        <p><strong>Пол:</strong> {{ patient.sex }}</p>
+        <p><strong>Контактная информация:</strong> {{ patient.contactInfo }}</p>
+      </div>
 
-    <form #recordForm="ngForm">
       <div class="mb-3">
         <label for="createdAt" class="form-label">Дата создания</label>
-        <input type="date" class="form-control" id="createdAt" name="createdAt" [(ngModel)]="newRecord.createdAt"
-          required>
+        <input type="date" class="form-control" id="createdAt" name="createdAt"
+               [(ngModel)]="newRecord.createdAt" required>
       </div>
 
       <div class="mb-3">
         <label for="anamnesis" class="form-label">Анамнез</label>
         <textarea class="form-control" id="anamnesis" rows="3" name="anamnesis"
-          [(ngModel)]="newRecord.anamnesis"></textarea>
+                  [(ngModel)]="newRecord.anamnesis"></textarea>
       </div>
 
       <div class="mb-3">
         <label for="complaints" class="form-label">Жалобы</label>
         <textarea class="form-control" id="complaints" rows="3" name="complaints"
-          [(ngModel)]="newRecord.complaintsHistory"></textarea>
+                  [(ngModel)]="newRecord.complaintsHistory"></textarea>
       </div>
 
       <div class="mb-3">
         <label for="hospitalizations" class="form-label">История госпитализаций</label>
         <textarea class="form-control" id="hospitalizations" rows="3" name="hospitalizations"
-          [(ngModel)]="newRecord.hospitalizationsHistory"></textarea>
+                  [(ngModel)]="newRecord.hospitalizationsHistory"></textarea>
       </div>
-    </form>
-  </div>
 
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss('cancel')">Закрыть</button>
-    <button type="button" class="btn btn-primary" [disabled]="!recordForm.form.valid"
-      (click)="save()">Сохранить</button>
-  </div>
+      <button type="button" class="btn btn-outline-success" (click)="openExternalService()">Открыть внешний сервис</button>
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss('cancel')">Закрыть</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!recordForm.form.valid">Сохранить</button>
+    </div>
+  </form>
 </div>

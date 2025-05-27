@@ -29,6 +29,7 @@ export class DocdashComponent implements OnInit {
   private getPatients() {
     this.patientService.getPatientslist().subscribe(data => {
       this.patients = data;
+      this.patients.sort((a, b) => b.id - a.id);
     });
   }
 

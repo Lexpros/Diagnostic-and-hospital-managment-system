@@ -27,8 +27,10 @@ export class AdmindashComponent implements OnInit {
     this.getPatients();
   }
 
-  private getPatients(){
-    this.patientService.getPatientslist().subscribe(data => { this.patients = data; 
+  private getPatients() {
+    this.patientService.getPatientslist().subscribe(data => {
+      this.patients = data;
+      this.patients.sort((a, b) => b.id - a.id);
     });
   }
 

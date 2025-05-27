@@ -5,6 +5,7 @@ import { MedicalRecord } from '../medical-record';
 import { MedicalRecordService } from '../medical-record.service';
 import { Patient } from '../patient';
 
+
 @Component({
   selector: 'app-creat-medical-record',
   templateUrl: './creat-medical-record.component.html',
@@ -13,7 +14,7 @@ import { Patient } from '../patient';
 export class CreatMedicalRecordComponent implements OnInit {
 
   @Input() patient: Patient; // Получаем пациента из родительского компонента (через модалку)
-
+  recordExists: boolean = false; // Флаг для проверки существования медицинской карты
   newRecord: MedicalRecord = new MedicalRecord();
 
   constructor(
@@ -25,44 +26,43 @@ export class CreatMedicalRecordComponent implements OnInit {
   this.medicalRecordService.getMedicalRecordsByPatientId(this.patient.id).subscribe({
     next: (record) => {
       if (record) {
-        this.newRecord = record; // Заполняем форму существующей записью
+        this.newRecord = record;
+        this.recordExists = true;
         console.log('Медицинская карта найдена:', record);
       }
     },
     error: (err) => {
       console.warn('Медицинская карта не найдена, создаём новую');
+      this.recordExists = false;
     }
   });
 }
 
   save(): void {
-  this.newRecord.patient = this.patient;
+    this.newRecord.patient = this.patient;
 
-  if (this.newRecord.id) {
-    // Обновление существующей записи
-    this.medicalRecordService.updateMedicalRecord(this.newRecord.id, this.newRecord).subscribe({
-      next: (response) => {
-        console.log('Медицинская карта обновлена:', response);
-        this.activeModal.close('updated');
-      },
-      error: (err) => {
-        console.error('Ошибка при обновлении:', err);
-      }
-    });
-  } else {
-    // Создание новой записи
-    this.medicalRecordService.createMedicalRecord(this.newRecord).subscribe({
-      next: (response) => {
-        console.log('Медицинская карта создана:', response);
-        this.activeModal.close('created');
-      },
-      error: (err) => {
-        console.error('Ошибка при создании:', err);
-      }
-    });
+    if (this.recordExists) {
+      this.medicalRecordService.updateMedicalRecord( this.patient.id, this.newRecord).subscribe({
+        next: (response) => {
+          console.log('Медицинская карта обновлена:', response);
+          this.activeModal.close('updated');
+        },
+        error: (err) => {
+          console.error('Ошибка при обновлении:', err);
+        }
+      });
+    } else {
+      this.medicalRecordService.createMedicalRecord(this.newRecord).subscribe({
+        next: (response) => {
+          console.log('Медицинская карта создана:', response);
+          this.activeModal.close('created');
+        },
+        error: (err) => {
+          console.error('Ошибка при создании:', err);
+        }
+      });
+    }
   }
-}
-
 
   cancel(): void {
     this.activeModal.dismiss('cancel');
@@ -72,4 +72,19 @@ export class CreatMedicalRecordComponent implements OnInit {
     console.log(this.patient);
     this.save();
   }
+
+
+  openExternalService(): void {
+  const url = 'http://localhost:8501/'; // замените на нужную ссылку
+  const width = 800;
+  const height = 600;
+  const left = (screen.width - width) / 2;
+  const top = (screen.height - height) / 2;
+
+  window.open(
+    url,
+    '_blank',
+    `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes`
+  );
+}
 }
