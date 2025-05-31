@@ -40,6 +40,10 @@
         <textarea class="form-control" id="hospitalizations" rows="3" name="hospitalizations"
                   [(ngModel)]="newRecord.hospitalizationsHistory"></textarea>
       </div>
+      
+
+      <app-admin-creat-appointment [patient]="patient"></app-admin-creat-appointment>
+
 
       <button type="button" class="btn btn-outline-success" (click)="openExternalService()">Открыть внешний сервис</button>
 

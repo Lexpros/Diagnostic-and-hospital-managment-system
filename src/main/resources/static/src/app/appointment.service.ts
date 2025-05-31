@@ -8,7 +8,7 @@ import { Appointment } from './appointment';
 })
 export class AppointmentService {
 
-  private baseUrl = "http://localhost:8899/api/v3/appointments";
+  private baseUrl = "http://localhost:8080/api/appoint/appointments";
 
 
   constructor(private httpClient: HttpClient) { }
@@ -17,13 +17,21 @@ export class AppointmentService {
     return this.httpClient.get<Appointment[]>(`${this.baseUrl}`);
   }
 
+//
+  getAppointmentsByPatientId(patientId: number): Observable<Appointment[]> {
+    return this.httpClient.get<Appointment[]>(`${this.baseUrl}/${patientId}`);
+  }
+
+  updateAppointment(id: number, appointment: Appointment): Observable<Object> {
+    return this.httpClient.put(`${this.baseUrl}/${id}`, appointment); 
+  }
   createAppointment(appointment: Appointment): Observable<Appointment> {
     return this.httpClient.post<Appointment>(`${this.baseUrl}`, appointment);
   }
 
-  getAppointmentById(id: number): Observable<Appointment> {   
-    return this.httpClient.get<Appointment>(`${this.baseUrl}/${id}`);
-  }
+  // getAppointmentById(id: number): Observable<Appointment> {   
+  //   return this.httpClient.get<Appointment>(`${this.baseUrl}/${id}`);
+  // }
 
 
   deleteAppointment(id: number): Observable<Object> {

@@ -1,0 +1,67 @@
+<div *ngIf="paginatedAppointments.length > 0">
+    <h5>Существующие приёмы</h5>
+    <div *ngFor="let app of paginatedAppointments" class="border p-2 mb-2">
+        <p><strong>Дата:</strong> {{ app.date | date:'dd.MM.yyyy' }}</p>
+        <p><strong>Врач:</strong> {{ app.doctor.fullName }}</p>
+        <p><strong>Цель:</strong> {{ app.purpose }}</p>
+        <p><strong>Статус:</strong> {{ app.status }}</p>
+        <p *ngIf="app.diagnosis"><strong>Диагноз:</strong> {{ app.diagnosis }}</p>
+        <p *ngIf="app.treatmentPlan"><strong>Лечение:</strong> {{ app.treatmentPlan }}</p>
+        <p *ngIf="app.conclusion"><strong>Заключение:</strong> {{ app.conclusion }}</p>
+    </div>
+    <div class="d-flex justify-content-between mb-3">
+        <button class="btn btn-outline-primary" (click)="prevPage()" [disabled]="currentPage === 1">← Назад</button>
+        <button class="btn btn-outline-primary" (click)="nextPage()"
+            [disabled]="currentPage * pageSize >= appointments.length">Вперёд →</button>
+    </div>
+</div>
+
+<hr>
+
+<h5>Добавить новый приём</h5>
+<form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+  <div class="mb-3">
+    <label class="form-label">Дата</label>
+    <input type="date" formControlName="date" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Время</label>
+    <select class="form-select" formControlName="time" required>
+      <option [ngValue]="null" disabled selected>Выберите время</option>
+      <option *ngFor="let time of timeSlots" [value]="time">{{ time }}</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Цель</label>
+    <input type="text" formControlName="purpose" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Диагноз</label>
+    <input type="text" formControlName="diagnosis" class="form-control">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Врач</label>
+    <select class="form-select" formControlName="doctor" required>
+      <option [ngValue]="null" disabled>Выберите врача</option>
+      <option *ngFor="let doctor of listMedicalStaff" [ngValue]="doctor">
+        {{ doctor.lastName }} {{ doctor.firstName }} {{ doctor.middleName }} — {{ doctor.specialty }}
+      </option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">План лечения</label>
+    <textarea formControlName="treatmentPlan" class="form-control" rows="2"></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Заключение</label>
+    <textarea formControlName="conclusion" class="form-control" rows="2"></textarea>
+  </div>
+
+  <button type="submit" class="btn btn-success" [disabled]="appointmentForm.invalid">Сохранить приём</button>
+</form>

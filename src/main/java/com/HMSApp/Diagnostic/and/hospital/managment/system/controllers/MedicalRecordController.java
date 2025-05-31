@@ -21,8 +21,8 @@ public class MedicalRecordController {
     @Autowired
     private MedicalRecordRepository medicalRecordRepository;
     @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping("/records")
 
+    @GetMapping("/records")
     public List<MedicalRecord> getMedicalRecords(){
 
         return medicalRecordRepository.findAll();

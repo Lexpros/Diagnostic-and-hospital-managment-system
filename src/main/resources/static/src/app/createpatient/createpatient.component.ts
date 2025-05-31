@@ -25,7 +25,7 @@ export class CreatepatientComponent implements OnInit {
   error => console.log(error));
 }
   goToPatientList() {
-    this.router.navigate(['/docdash']);
+    this.router.navigate(['/admindash']);
     
 
   }

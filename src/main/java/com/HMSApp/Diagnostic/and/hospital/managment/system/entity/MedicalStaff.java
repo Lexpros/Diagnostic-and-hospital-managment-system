@@ -111,6 +111,11 @@ public class MedicalStaff {
         this.facility = facility;
     }
 
+    public String getFullName() {
+        return lastName + " " + firstName + " " + middleName;
+    }
+
+
 /*
  TODO [Reverse Engineering] create field to map the 'role' column
  Available actions: Define target Java type | Uncomment as is | Remove column mapping
