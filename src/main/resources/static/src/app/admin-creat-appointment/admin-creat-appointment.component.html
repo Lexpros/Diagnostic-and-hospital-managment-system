@@ -1,67 +1,124 @@
-<div *ngIf="paginatedAppointments.length > 0">
-    <h5>Существующие приёмы</h5>
-    <div *ngFor="let app of paginatedAppointments" class="border p-2 mb-2">
-        <p><strong>Дата:</strong> {{ app.date | date:'dd.MM.yyyy' }}</p>
-        <p><strong>Врач:</strong> {{ app.doctor.lastName }} {{ app.doctor.firstName }} {{ app.doctor.middleName }}</p>
-        <p><strong>Цель:</strong> {{ app.purpose }}</p>
-        <p><strong>Статус:</strong> {{ app.status }}</p>
-        <p *ngIf="app.diagnosis"><strong>Диагноз:</strong> {{ app.diagnosis }}</p>
-        <p *ngIf="app.treatmentPlan"><strong>Лечение:</strong> {{ app.treatmentPlan }}</p>
-        <p *ngIf="app.conclusion"><strong>Заключение:</strong> {{ app.conclusion }}</p>
+<button class="bi bi-calendar-plus" *ngIf="!creatingNew && isAdmin()" (click)="showCreateForm()">Новый приём</button>
+
+<form *ngIf="creatingNew" [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+  <div class="row g-3 mb-2">
+    <div class="col-md-3" *ngIf="role === 'admin' || role === 'doctor'">
+      <label class="form-label">Дата</label>
+      <input type="date" formControlName="date" class="form-control" required>
     </div>
-    <div class="d-flex justify-content-between mb-3">
-        <button class="btn btn-outline-primary" (click)="prevPage()" [disabled]="currentPage === 1">← Назад</button>
-        <button class="btn btn-outline-primary" (click)="nextPage()"
-            [disabled]="currentPage * pageSize >= appointments.length">Вперёд →</button>
+
+    <div class="col-md-3" *ngIf="role === 'admin' || role === 'doctor'">
+      <label class="form-label">Время</label>
+      <select class="form-select" formControlName="time" required>
+        <option [ngValue]="null" disabled>Выберите время</option>
+        <option *ngFor="let time of timeSlots" [value]="time">{{ time }}</option>
+      </select>
     </div>
-</div>
 
-<hr>
+    <div class="col-md-6" *ngIf="role === 'admin' || role === 'doctor'">
+      <label class="form-label">Цель</label>
+      <input type="text" formControlName="purpose" class="form-control" required>
+    </div>
 
-<h5>Добавить новый приём</h5>
-<form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
-  <div class="mb-3">
-    <label class="form-label">Дата</label>
-    <input type="date" formControlName="date" class="form-control" required>
+    <div class="col-md-6" *ngIf="role === 'admin'">
+      <label class="form-label">Врач</label>
+      <select class="form-select" formControlName="doctor" required>
+        <option [ngValue]="null" disabled>Выберите врача</option>
+        <option *ngFor="let doctor of listMedicalStaff" [ngValue]="doctor">
+          {{ doctor.lastName }} {{ doctor.firstName }} {{ doctor.middleName }} — {{ doctor.specialty }}
+        </option>
+      </select>
+    </div>
+
+
   </div>
 
-  <div class="mb-3">
-    <label class="form-label">Время</label>
-    <select class="form-select" formControlName="time" required>
-      <option [ngValue]="null" disabled selected>Выберите время</option>
-      <option *ngFor="let time of timeSlots" [value]="time">{{ time }}</option>
-    </select>
+  <div class="d-flex justify-content-start">
+    <button type="submit" class="btn btn-success me-2" [disabled]="appointmentForm.invalid">Сохранить приём</button>
+    <button type="button" class="btn btn-secondary" (click)="cancelCreate()">Отмена</button>
   </div>
-
-  <div class="mb-3">
-    <label class="form-label">Цель</label>
-    <input type="text" formControlName="purpose" class="form-control" required>
-  </div>
-
-  <div class="mb-3">
-    <label class="form-label">Диагноз</label>
-    <input type="text" formControlName="diagnosis" class="form-control">
-  </div>
-
-  <div class="mb-3">
-    <label class="form-label">Врач</label>
-    <select class="form-select" formControlName="doctor" required>
-      <option [ngValue]="null" disabled>Выберите врача</option>
-      <option *ngFor="let doctor of listMedicalStaff" [ngValue]="doctor">
-        {{ doctor.lastName }} {{ doctor.firstName }} {{ doctor.middleName }} — {{ doctor.specialty }}
-      </option>
-    </select>
-  </div>
-
-  <div class="mb-3">
-    <label class="form-label">План лечения</label>
-    <textarea formControlName="treatmentPlan" class="form-control" rows="2"></textarea>
-  </div>
-
-  <div class="mb-3">
-    <label class="form-label">Заключение</label>
-    <textarea formControlName="conclusion" class="form-control" rows="2"></textarea>
-  </div>
-
-  <button type="submit" class="btn btn-success" [disabled]="appointmentForm.invalid">Сохранить приём</button>
 </form>
+
+<div *ngIf="paginatedAppointments.length > 0 && (role === 'admin' || role === 'doctor')">
+  <h5 class="mb-3">Существующие приёмы</h5>
+
+  <div *ngFor="let app of paginatedAppointments" class="border rounded p-2 mb-2">
+    <!-- Режим просмотра -->
+    <ng-container *ngIf="!editingMap[app.id]; else editForm">
+
+      <div class="d-flex flex-wrap justify-content-between mb-1">
+        <div><strong>Дата:</strong> {{ app.date | date:'dd.MM.yyyy HH:mm' }}</div>
+        <div><strong>Врач:</strong> {{ app.doctor.lastName }} {{ app.doctor.firstName }} {{ app.doctor.middleName }}
+        </div>
+        <div><strong>Цель:</strong> {{ app.purpose }}</div>
+        <div><strong>Статус:</strong> {{ app.status }}</div>
+      </div>
+
+
+
+      <div class="mt-2 d-flex justify-content-end">
+        <button class="btn btn-sm btn-outline-primary" (click)="enableEdit(app.id)">Редактировать</button>
+      </div>
+    </ng-container>
+
+    <!-- Режим редактирования -->
+    <ng-template #editForm>
+      <div class="row g-3">
+        <div class="col-md-3" *ngIf="role === 'admin'">
+          <label class="form-label">Дата и время</label>
+          <input type="datetime-local" class="form-control" [value]="formatDateTimeLocal(app.date)"
+            (change)="onDateTimeChange($event, app)" name="date-{{app.id}}">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label" *ngIf="role === 'admin'">Врач</label>
+          <select class="form-select" [(ngModel)]="app.doctor" [compareWith]="compareDoctors" name="doctor-{{app.id}}">
+            <option [ngValue]="null" disabled>Выберите врача</option>
+            <option *ngFor="let doctor of listMedicalStaff" [ngValue]="doctor">
+              {{ doctor.lastName }} {{ doctor.firstName }} {{ doctor.middleName }} — {{ doctor.specialty }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label" *ngIf="role === 'admin' || role === 'doctor'">Цель</label>
+          <input type="text" class="form-control" [(ngModel)]="app.purpose" name="purpose-{{app.id}}">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label" *ngIf="role === 'admin' || role === 'doctor'">Статус</label>
+          <select class="form-select" [(ngModel)]="app.status" name="status-{{app.id}}">
+            <option *ngFor="let status of appointmentStatuses" [value]="status">{{ status }}</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Диагноз</label>
+          <input type="text" class="form-control" [(ngModel)]="app.diagnosis" name="diagnosis-{{app.id}}">
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">План лечения</label>
+          <input type="text" class="form-control" [(ngModel)]="app.treatmentPlan" name="treatmentPlan-{{app.id}}">
+        </div>
+
+        <div class="col-12">
+          <label class="form-label">Заключение</label>
+          <textarea class="form-control" rows="2" [(ngModel)]="app.conclusion" name="conclusion-{{app.id}}"></textarea>
+        </div>
+
+        <div class="col-12 mt-2">
+          <button class="btn btn-sm btn-success me-2" (click)="saveEditedAppointment(app)">Сохранить</button>
+          <button class="btn btn-sm btn-secondary" (click)="cancelEdit(app.id)">Отмена</button>
+        </div>
+      </div>
+    </ng-template>
+
+  </div>
+
+  <div class="d-flex justify-content-between mb-3">
+    <button class="btn btn-outline-primary btn-sm" (click)="prevPage()" [disabled]="currentPage === 1">← Назад</button>
+    <button class="btn btn-outline-primary btn-sm" (click)="nextPage()"
+      [disabled]="currentPage * pageSize >= appointments.length">Вперёд →</button>
+  </div>
+</div>

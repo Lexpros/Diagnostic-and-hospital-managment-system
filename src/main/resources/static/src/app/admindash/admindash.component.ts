@@ -66,6 +66,7 @@ export class AdmindashComponent implements OnInit {
       backdrop: 'static'
     });
     modalRef.componentInstance.patient = patient;
+    modalRef.componentInstance.mode = 'admin'; // передаём режим
   }
 
 }

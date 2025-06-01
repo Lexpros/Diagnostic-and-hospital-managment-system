@@ -1,0 +1,26 @@
+label.form-label {
+  font-weight: 500;
+}
+
+input.form-control,
+textarea.form-control,
+select.form-select {
+  border-radius: 0.5rem;
+  box-shadow: none;
+  transition: border-color 0.2s ease-in-out;
+}
+
+input.form-control:focus,
+textarea.form-control:focus,
+select.form-select:focus {
+  border-color: #198754; /* Bootstrap success */
+  box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+}
+
+button.btn {
+  border-radius: 0.5rem;
+}
+
+.card {
+  border-radius: 0.75rem;
+}

@@ -38,7 +38,8 @@ export class DocdashComponent implements OnInit {
       size: 'lg',
       backdrop: 'static'
     });
-    modalRef.componentInstance.patient = patient;
+    modalRef.componentInstance.patient = patient;    
+    modalRef.componentInstance.role = 'doctor'; // передаём режим
   }
 
   viewPatient(id: number) {

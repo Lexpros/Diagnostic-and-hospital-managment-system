@@ -14,6 +14,7 @@ import { Patient } from '../patient';
 export class CreatMedicalRecordComponent implements OnInit {
 
   @Input() patient: Patient; // Получаем пациента из родительского компонента (через модалку)
+  @Input() role: 'admin' | 'doctor'; // Режим работы компонента: 'admin' или 'doctor'
   recordExists: boolean = false; // Флаг для проверки существования медицинской карты
   newRecord: MedicalRecord = new MedicalRecord();
 

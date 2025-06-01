@@ -7,46 +7,60 @@
 
   <form #recordForm="ngForm" (ngSubmit)="onSubmit()">
     <div class="modal-body">
-      <div *ngIf="patient">
-        <h5>Информация о пациенте</h5>
-        <p><strong>Фамилия:</strong> {{ patient.lastName }}</p>
-        <p><strong>Имя:</strong> {{ patient.firstName }}</p>
-        <p><strong>Отчество:</strong> {{ patient.middleName }}</p>
-        <p><strong>Дата рождения:</strong> {{ patient.birthDate | date: 'dd.MM.yyyy' }}</p>
-        <p><strong>Пол:</strong> {{ patient.sex }}</p>
-        <p><strong>Контактная информация:</strong> {{ patient.contactInfo }}</p>
+      <div *ngIf="patient" class="card p-3 mb-3 shadow-sm">
+        <h5 class="mb-3">Информация о пациенте</h5>
+        <div class="row">
+          <div class="col-md-6 mb-2 d-flex">
+            <div class="fw-semibold me-2" style="min-width: 130px;">ФИО:</div>
+            <div>{{ patient.firstName }} {{ patient.lastName }} {{ patient.middleName }}</div>
+          </div>
+          <div class="col-md-6 mb-2 d-flex">
+            <div class="fw-semibold me-2" style="min-width: 130px;">Дата рождения:</div>
+            <div>{{ patient.birthDate | date: 'dd.MM.yyyy' }}</div>
+          </div>
+          <div class="col-md-6 mb-2 d-flex">
+            <div class="fw-semibold me-2" style="min-width: 130px;">Пол:</div>
+            <div>{{ patient.sex }}</div>
+          </div>
+          <div class="col-md-6 mb-2 d-flex">
+            <div class="fw-semibold me-2" style="min-width: 130px;">Контакты:</div>
+            <div>{{ patient.contactInfo }}</div>
+          </div>
+        </div>
       </div>
+
 
       <div class="mb-3">
         <label for="createdAt" class="form-label">Дата создания</label>
-        <input type="date" class="form-control" id="createdAt" name="createdAt"
-               [(ngModel)]="newRecord.createdAt" required>
+        <input type="date" class="form-control" id="createdAt" name="createdAt" [(ngModel)]="newRecord.createdAt"
+          required>
       </div>
 
       <div class="mb-3">
         <label for="anamnesis" class="form-label">Анамнез</label>
         <textarea class="form-control" id="anamnesis" rows="3" name="anamnesis"
-                  [(ngModel)]="newRecord.anamnesis"></textarea>
+          [(ngModel)]="newRecord.anamnesis"></textarea>
       </div>
 
       <div class="mb-3">
         <label for="complaints" class="form-label">Жалобы</label>
         <textarea class="form-control" id="complaints" rows="3" name="complaints"
-                  [(ngModel)]="newRecord.complaintsHistory"></textarea>
+          [(ngModel)]="newRecord.complaintsHistory"></textarea>
       </div>
 
       <div class="mb-3">
         <label for="hospitalizations" class="form-label">История госпитализаций</label>
         <textarea class="form-control" id="hospitalizations" rows="3" name="hospitalizations"
-                  [(ngModel)]="newRecord.hospitalizationsHistory"></textarea>
+          [(ngModel)]="newRecord.hospitalizationsHistory"></textarea>
       </div>
-      
 
-      <app-admin-creat-appointment [patient]="patient"></app-admin-creat-appointment>
-
-
-      <button type="button" class="btn btn-outline-success" (click)="openExternalService()">Открыть внешний сервис</button>
-
+      <div>
+        <app-admin-creat-appointment [patient]="patient" [role]="role"></app-admin-creat-appointment>
+        <div class="mt-2 d-flex justify-content-end">
+          <button type="button" class="btn btn-outline-success" (click)="openExternalService()">Открыть
+            внешний сервис</button>
+        </div>
+      </div>
     </div>
 
     <div class="modal-footer">
