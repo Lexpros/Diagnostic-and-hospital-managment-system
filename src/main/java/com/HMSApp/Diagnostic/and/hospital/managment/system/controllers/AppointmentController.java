@@ -2,6 +2,8 @@ package com.HMSApp.Diagnostic.and.hospital.managment.system.controllers;
 
 import com.HMSApp.Diagnostic.and.hospital.managment.system.entity.Appointment;
 import com.HMSApp.Diagnostic.and.hospital.managment.system.entity.AppointmentDTO;
+import com.HMSApp.Diagnostic.and.hospital.managment.system.entity.MedicalStaffDTO;
+import com.HMSApp.Diagnostic.and.hospital.managment.system.entity.PatientDTO;
 import com.HMSApp.Diagnostic.and.hospital.managment.system.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +35,44 @@ public class AppointmentController {
     }
 
     @GetMapping("/appointments/{patient_id}")
-    public ResponseEntity<List<Appointment>> getAppointmentsByPatientId(@PathVariable Long patient_id) {
+    public ResponseEntity<List<AppointmentDTO>> getAppointmentsByPatientId(@PathVariable Long patient_id) {
         List<Appointment> appointments = appointmentRepository.findByPatientId(patient_id);
-        return ResponseEntity.ok(appointments);
+
+        List<AppointmentDTO> dtoList = appointments.stream().map(appointment -> {
+            AppointmentDTO dto = new AppointmentDTO();
+            dto.setId(appointment.getId());
+            dto.setPurpose(appointment.getPurpose());
+            dto.setDate(appointment.getDate().toString());
+            dto.setConclusion(appointment.getConclusion());
+            dto.setStatus(appointment.getStatus());
+            dto.setDiagnosis(appointment.getDiagnosis());
+            dto.setTreatmentPlan(appointment.getTreatmentPlan());
+
+            // Маппинг пациента
+            PatientDTO patientDTO = new PatientDTO();
+            patientDTO.setId(appointment.getPatient().getId());
+            patientDTO.setLastName(appointment.getPatient().getLastName());
+            patientDTO.setFirstName(appointment.getPatient().getFirstName());
+            patientDTO.setMiddleName(appointment.getPatient().getMiddleName());
+            patientDTO.setBirthDate(appointment.getPatient().getBirthDate());
+            patientDTO.setSex(appointment.getPatient().getSex());
+            patientDTO.setContactInfo(appointment.getPatient().getContactInfo());
+            dto.setPatient(patientDTO);
+
+            // Маппинг врача
+            MedicalStaffDTO doctorDTO = new MedicalStaffDTO();
+            doctorDTO.setId(appointment.getDoctor().getId());
+            doctorDTO.setLastName(appointment.getDoctor().getLastName());
+            doctorDTO.setFirstName(appointment.getDoctor().getFirstName());
+            doctorDTO.setMiddleName(appointment.getDoctor().getMiddleName());
+            doctorDTO.setSpecialty(appointment.getDoctor().getSpecialty());
+            doctorDTO.setContactInfo(appointment.getDoctor().getContactInfo());
+            dto.setDoctor(doctorDTO);
+
+            return dto;
+        }).toList();
+
+        return ResponseEntity.ok(dtoList);
     }
 
     @PutMapping("/appointments/{id}")

@@ -2,7 +2,7 @@
     <h5>Существующие приёмы</h5>
     <div *ngFor="let app of paginatedAppointments" class="border p-2 mb-2">
         <p><strong>Дата:</strong> {{ app.date | date:'dd.MM.yyyy' }}</p>
-        <p><strong>Врач:</strong> {{ app.doctor.fullName }}</p>
+        <p><strong>Врач:</strong> {{ app.doctor.lastName }} {{ app.doctor.firstName }} {{ app.doctor.middleName }}</p>
         <p><strong>Цель:</strong> {{ app.purpose }}</p>
         <p><strong>Статус:</strong> {{ app.status }}</p>
         <p *ngIf="app.diagnosis"><strong>Диагноз:</strong> {{ app.diagnosis }}</p>
