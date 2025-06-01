@@ -22,7 +22,7 @@
             <div class="fw-semibold me-2" style="min-width: 130px;">Пол:</div>
             <div>{{ patient.sex }}</div>
           </div>
-          <div class="col-md-6 mb-2 d-flex">
+          <div class="col-md-6 mb-2 d-flex" *ngIf="role === 'admin'">
             <div class="fw-semibold me-2" style="min-width: 130px;">Контакты:</div>
             <div>{{ patient.contactInfo }}</div>
           </div>
@@ -36,27 +36,27 @@
           required>
       </div>
 
-      <div class="mb-3">
-        <label for="anamnesis" class="form-label">Анамнез</label>
+      <div class="mb-3" *ngIf="role === 'doctor'">
+        <label for="anamnesis" class="form-label" >Анамнез</label>
         <textarea class="form-control" id="anamnesis" rows="3" name="anamnesis"
           [(ngModel)]="newRecord.anamnesis"></textarea>
       </div>
 
-      <div class="mb-3">
-        <label for="complaints" class="form-label">Жалобы</label>
+      <div class="mb-3"*ngIf="role === 'doctor'">
+        <label for="complaints" class="form-label" >Жалобы</label>
         <textarea class="form-control" id="complaints" rows="3" name="complaints"
           [(ngModel)]="newRecord.complaintsHistory"></textarea>
       </div>
 
-      <div class="mb-3">
-        <label for="hospitalizations" class="form-label">История госпитализаций</label>
+      <div class="mb-3" *ngIf="role === 'doctor'">
+        <label for="hospitalizations" class="form-label" >История госпитализаций</label>
         <textarea class="form-control" id="hospitalizations" rows="3" name="hospitalizations"
           [(ngModel)]="newRecord.hospitalizationsHistory"></textarea>
       </div>
 
       <div>
         <app-admin-creat-appointment [patient]="patient" [role]="role"></app-admin-creat-appointment>
-        <div class="mt-2 d-flex justify-content-end">
+        <div class="mt-2 d-flex justify-content-end" *ngIf="role === 'doctor'">
           <button type="button" class="btn btn-outline-success" (click)="openExternalService()">Открыть
             внешний сервис</button>
         </div>

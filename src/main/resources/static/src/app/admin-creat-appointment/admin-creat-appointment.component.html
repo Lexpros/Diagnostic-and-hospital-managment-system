@@ -1,13 +1,13 @@
-<button class="bi bi-calendar-plus" *ngIf="!creatingNew && isAdmin()" (click)="showCreateForm()">Новый приём</button>
+<i class="btn btn-outline-success mb-3" *ngIf="!creatingNew && isAdmin()" (click)="showCreateForm()"><i class="bi bi-calendar-plus"></i> Новый приём</i>
 
 <form *ngIf="creatingNew" [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
   <div class="row g-3 mb-2">
-    <div class="col-md-3" *ngIf="role === 'admin' || role === 'doctor'">
+    <div class="col-md-3">
       <label class="form-label">Дата</label>
       <input type="date" formControlName="date" class="form-control" required>
     </div>
 
-    <div class="col-md-3" *ngIf="role === 'admin' || role === 'doctor'">
+    <div class="col-md-3">
       <label class="form-label">Время</label>
       <select class="form-select" formControlName="time" required>
         <option [ngValue]="null" disabled>Выберите время</option>
@@ -15,7 +15,7 @@
       </select>
     </div>
 
-    <div class="col-md-6" *ngIf="role === 'admin' || role === 'doctor'">
+    <div class="col-md-6">
       <label class="form-label">Цель</label>
       <input type="text" formControlName="purpose" class="form-control" required>
     </div>
@@ -48,12 +48,19 @@
 
       <div class="d-flex flex-wrap justify-content-between mb-1">
         <div><strong>Дата:</strong> {{ app.date | date:'dd.MM.yyyy HH:mm' }}</div>
-        <div><strong>Врач:</strong> {{ app.doctor.lastName }} {{ app.doctor.firstName }} {{ app.doctor.middleName }}
+        <div *ngIf="isAdmin()"><strong>Врач:</strong> {{ app.doctor.lastName }} {{ app.doctor.firstName }} {{ app.doctor.middleName }}
         </div>
         <div><strong>Цель:</strong> {{ app.purpose }}</div>
         <div><strong>Статус:</strong> {{ app.status }}</div>
       </div>
+      <div class="d-flex flex-wrap justify-content-between mb-1">
+        <div *ngIf="app.diagnosis && isDoctor()"><strong>Диагноз:</strong> {{ app.diagnosis }}</div>
+        <div *ngIf="app.treatmentPlan && isDoctor()"><strong>Лечение:</strong> {{ app.treatmentPlan }}</div>
+      </div>
 
+      <div *ngIf="app.conclusion && isDoctor()" class="mt-1">
+        <strong>Заключение:</strong> {{ app.conclusion }}
+      </div>
 
 
       <div class="mt-2 d-flex justify-content-end">
@@ -64,14 +71,14 @@
     <!-- Режим редактирования -->
     <ng-template #editForm>
       <div class="row g-3">
-        <div class="col-md-3" *ngIf="role === 'admin'">
+        <div class="col-md-3" *ngIf="isAdmin()">
           <label class="form-label">Дата и время</label>
           <input type="datetime-local" class="form-control" [value]="formatDateTimeLocal(app.date)"
             (change)="onDateTimeChange($event, app)" name="date-{{app.id}}">
         </div>
 
-        <div class="col-md-3">
-          <label class="form-label" *ngIf="role === 'admin'">Врач</label>
+        <div class="col-md-3" *ngIf="isAdmin()">
+          <label class="form-label">Врач</label>
           <select class="form-select" [(ngModel)]="app.doctor" [compareWith]="compareDoctors" name="doctor-{{app.id}}">
             <option [ngValue]="null" disabled>Выберите врача</option>
             <option *ngFor="let doctor of listMedicalStaff" [ngValue]="doctor">
@@ -81,28 +88,28 @@
         </div>
 
         <div class="col-md-3">
-          <label class="form-label" *ngIf="role === 'admin' || role === 'doctor'">Цель</label>
+          <label class="form-label">Цель</label>
           <input type="text" class="form-control" [(ngModel)]="app.purpose" name="purpose-{{app.id}}">
         </div>
 
         <div class="col-md-3">
-          <label class="form-label" *ngIf="role === 'admin' || role === 'doctor'">Статус</label>
+          <label class="form-label">Статус</label>
           <select class="form-select" [(ngModel)]="app.status" name="status-{{app.id}}">
             <option *ngFor="let status of appointmentStatuses" [value]="status">{{ status }}</option>
           </select>
         </div>
 
-        <div class="col-md-6">
-          <label class="form-label">Диагноз</label>
+        <div class="col-md-6 " *ngIf="isDoctor()">
+          <label class="form-label" >Диагноз</label>
           <input type="text" class="form-control" [(ngModel)]="app.diagnosis" name="diagnosis-{{app.id}}">
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6" *ngIf="isDoctor()">
           <label class="form-label">План лечения</label>
           <input type="text" class="form-control" [(ngModel)]="app.treatmentPlan" name="treatmentPlan-{{app.id}}">
         </div>
 
-        <div class="col-12">
+        <div class="col-12" *ngIf="isDoctor()">
           <label class="form-label">Заключение</label>
           <textarea class="form-control" rows="2" [(ngModel)]="app.conclusion" name="conclusion-{{app.id}}"></textarea>
         </div>
